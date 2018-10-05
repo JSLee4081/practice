@@ -1,5 +1,5 @@
 var express = require("express");
-var { User, Comment } = require("../models").Comment;
+var { User, Comment } = require("../models");
 
 var router = express.Router();
 
@@ -11,12 +11,12 @@ router.get("/:id", function(req, res, next) {
       where: { id: req.params.id }
     }
   })
-    .then(comment => {
-      console.log(comment);
-      res.json(comment);
+    .then(comments => {
+      console.log(comments);
+      res.json(comments);
     })
     .catch(err => {
-      console.err(err);
+      console.error(err);
       next(err);
     });
 });
@@ -31,7 +31,7 @@ router.post("/", function(req, res, next) {
       res.status(201).json(result);
     })
     .catch(err => {
-      console.err(err);
+      console.error(err);
       next(err);
     });
 });
@@ -48,7 +48,7 @@ router.patch("/:id", function(req, res, next) {
       res.json(result);
     })
     .catch(err => {
-      console.log(err);
+      console.error(err);
       next(err);
     });
 });

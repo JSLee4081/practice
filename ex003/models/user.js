@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       comment: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
       },
       create_at: {
         type: DataTypes.DATE,

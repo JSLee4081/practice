@@ -11,14 +11,14 @@ function getUser() {
   var xhr = new XMLHttpRequest();
   xhr.onload = function() {
     if (xhr.status === 200) {
-      var user = JSON.parse(xhr.responseText);
+      var users = JSON.parse(xhr.responseText);
       console.log(user);
       var tbody = document.querySelector("#user-list tbody");
       tbody.innerHTML = "";
       user.map(function(user) {
         var row = document.createElement("tr");
         row.addEventListener("click", function() {
-          getComment("id");
+          getComment(user.id);
         });
         var td = document.createElement("td");
         td.textContent = user.id;
@@ -35,7 +35,7 @@ function getUser() {
       console.error(xhr.responseText);
     }
   };
-  xhr.open("GET", "/user");
+  xhr.open("GET", "/users");
   xhr.send();
 }
 // 댓글 로딩
@@ -54,12 +54,13 @@ function getComment(id) {
         td = document.createElement("td");
         td.textContent = comment.user.name;
         row.appendChild(td);
+				td = document.createElement("td");
         td.textContent = comment.comment;
         row.appendChild(td);
         var edit = document.createElement("button");
         edit.textContent = "수정";
         edit.addEventListener("click", function() {
-          var newComment = promt("바꿀 내용을 입력하세요.");
+          var newComment = prompt("바꿀 내용을 입력하세요.");
           if (!newComment) {
             return alert("내용을 반드시 입력해야 합니다!");
           }
@@ -72,7 +73,7 @@ function getComment(id) {
               console.error(xhr.responseText);
             }
           };
-          xhr.open("PATH", "/comments/" + comment.id);
+          xhr.open("PATCH", "/comments/" + comment.id);
           xhr.setRequestHeader("Content-Type", "application/json");
           xhr.send(JSON.stringify({ comment: newComment }));
         });
@@ -93,7 +94,7 @@ function getComment(id) {
         });
         td = document.createElement("td");
         td.appendChild(edit);
-        row.appendChild(id);
+        row.appendChild(td);
         td = document.createElement("td");
         td.appendChild(remove);
         row.appendChild(td);
@@ -103,7 +104,7 @@ function getComment(id) {
       console.err(xhr.responseText);
     }
   };
-  xhr.open("GET", "/comments" + id);
+  xhr.open("GET", "/comments/" + id);
   xhr.send();
 }
 // 사용자 등록시
@@ -127,7 +128,7 @@ document.getElementById("user-form").addEventListener("submit", function(e) {
       console.error(xhr.responseText);
     }
   };
-  xhr.open("POST", "/user");
+  xhr.open("POST", "/users");
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send(JSON.stringify({ name: name, age: age, married: married }));
   e.target.username.value = "";
@@ -157,7 +158,7 @@ document.getElementById("comment-form").addEventListener("submit", function(e) {
   };
   xhr.open("POST", "/comments");
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(JSON.parse({ id: id, comment: comment }));
+  xhr.send(JSON.stringify({ id: id, comment: comment }));
   e.target.userid.value = "";
   e.target.comment.value = "";
 });

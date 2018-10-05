@@ -26,10 +26,9 @@ router.post("/", function(req, res, next) {
       res.status(201).json(result);
     })
     .catch(err => {
-      console.err(err);
+      console.error(err);
       next(err);
     });
 });
 
 module.exports = router;
-
